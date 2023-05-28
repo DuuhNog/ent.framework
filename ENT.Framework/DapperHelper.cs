@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using ENT.Framework.Domain.Model;
 using System.Data;
 using System.Data.SqlClient;
 
