@@ -361,3 +361,24 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/ENT.Framework/bin/Debug/net7.0/ENT.Framework.deps.json
+/ENT.Framework/bin/Debug/net7.0/ENT.Framework.dll
+/ENT.Framework/bin/Debug/net7.0/ENT.Framework.Domain.dll
+/ENT.Framework/bin/Debug/net7.0/ENT.Framework.pdb
+/ENT.Framework/bin/Debug/net7.0/ENT.Framework.Domain.pdb
+/ENT.Framework/bin/Debug/ENT.Framework.1.1.11.nupkg
+/ENT.Framework/obj/Debug/net7.0/ENT.Framework.pdb
+/ENT.Framework/obj/Debug/net7.0/ENT.Framework.dll
+/ENT.Framework/obj/Debug/net7.0/ENT.Framework.csproj.FileListAbsolute.txt
+/ENT.Framework/obj/Debug/net7.0/ENT.Framework.csproj.CoreCompileInputs.cache
+/ENT.Framework/obj/Debug/net7.0/ENT.Framework.csproj.CopyComplete
+/ENT.Framework/obj/Debug/net7.0/ENT.Framework.AssemblyInfoInputs.cache
+/ENT.Framework/obj/Debug/net7.0/ENT.Framework.AssemblyInfo.cs
+/ENT.Framework/obj/Debug/net7.0/ref/ENT.Framework.dll
+/ENT.Framework/obj/Debug/net7.0/refint/ENT.Framework.dll
+/ENT.Framework/obj/project.nuget.cache
+/ENT.Framework/obj/project.assets.json
+/ENT.Framework/obj/ENT.Framework.csproj.nuget.dgspec.json
+/ENT.Framework/obj/Debug/ENT.Framework.1.1.11.nuspec
+/.vs/ProjectEvaluation/ent.framework.projects.v6.1
+/.vs/ProjectEvaluation/ent.framework.metadata.v6.1
