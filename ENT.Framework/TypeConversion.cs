@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using System.ComponentModel;
 using System.Globalization;
+using System.Reflection;
 
 namespace ENT.Framework
 {
@@ -998,6 +1000,30 @@ namespace ENT.Framework
             }
 
             return text;
+        }
+
+        /// <summary>
+        /// Método responsável por mostrar o user friendly names dos enums, apenas adicionando [Description("Nome Amigável")] e utilizar enum.GetDescription()
+        /// </summary>
+        /// <param name="value">enum</param>
+        /// <returns>String com o nome do enum</returns>
+        public static string GetDescription(this Enum value)
+        {
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    DescriptionAttribute attr = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
+                    if (attr != null)
+                    {
+                        return attr.Description;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

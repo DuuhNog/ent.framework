@@ -6,7 +6,7 @@
     <Company>EN Technolgy</Company>
     <Product>Framework</Product>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Authors>ENT.Framework</Authors>
   </PropertyGroup>
 
