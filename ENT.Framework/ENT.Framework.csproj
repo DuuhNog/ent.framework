@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Company>EN Technolgy</Company>
     <Product>Framework</Product>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>1.2.1</Version>
     <Authors>ENT.Framework</Authors>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

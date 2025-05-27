@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "dsf1lh0FpNyzBywWP19eA7RUHFNNrFhusrzRDBtnTyzDwa74k/EtYMm4MJrCuIxLRL0tUQZVoy/TXe6copp57w==",
+  "dgSpecHash": "tagDmP0q3eg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Eduardo Nogueira\\OneDrive\\EN Technology\\Projetos Empresa\\ENT.Framework\\ENT.Framework.Domain\\ENT.Framework.Domain.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/Users/eduardonogueira/ent.framework/ENT.Framework.Domain/ENT.Framework.Domain.csproj",
+  "expectedPackageFiles": [
+    "/Users/eduardonogueira/.nuget/packages/microsoft.netcore.app.ref/8.0.11/microsoft.netcore.app.ref.8.0.11.nupkg.sha512",
+    "/Users/eduardonogueira/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.11/microsoft.aspnetcore.app.ref.8.0.11.nupkg.sha512"
+  ],
   "logs": []
 }

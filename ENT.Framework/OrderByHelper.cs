@@ -1,117 +1,116 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ENT.Framework
+namespace ENT.Framework;
+
+public static class OrderByHelper
 {
-    public static class OrderByHelper
+    public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> enumerable, string orderBy)
     {
-        public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> enumerable, string orderBy)
+        return enumerable.AsQueryable().OrderBy(orderBy).AsEnumerable();
+    }
+
+    public static IQueryable<T> OrderBy<T>(this IQueryable<T> collection, string orderBy)
+    {
+        foreach (OrderByInfo orderByInfo in ParseOrderBy(orderBy))
+            collection = ApplyOrderBy(collection, orderByInfo);
+
+        return collection;
+    }
+
+    private static IQueryable<T> ApplyOrderBy<T>(IQueryable<T> collection, OrderByInfo orderByInfo)
+    {
+        string[] props = orderByInfo.PropertyName.Split('.');
+        Type type = typeof(T);
+
+        ParameterExpression arg = Expression.Parameter(type, "x");
+        Expression expr = arg;
+        foreach (string prop in props)
         {
-            return enumerable.AsQueryable().OrderBy(orderBy).AsEnumerable();
+            // use reflection (not ComponentModel) to mirror LINQ
+            PropertyInfo pi = type.GetProperty(prop, BindingFlags.SetProperty |
+                                                     BindingFlags.IgnoreCase |
+                                                     BindingFlags.Public |
+                                                     BindingFlags.Instance);
+            expr = Expression.Property(expr, pi);
+            type = pi.PropertyType;
         }
 
-        public static IQueryable<T> OrderBy<T>(this IQueryable<T> collection, string orderBy)
+        Type delegateType = typeof(Func<,>).MakeGenericType(typeof(T), type);
+        LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
+        string methodName = String.Empty;
+
+        if (!orderByInfo.Initial && collection is IOrderedQueryable<T>)
         {
-            foreach (OrderByInfo orderByInfo in ParseOrderBy(orderBy))
-                collection = ApplyOrderBy(collection, orderByInfo);
-
-            return collection;
-        }
-
-        private static IQueryable<T> ApplyOrderBy<T>(IQueryable<T> collection, OrderByInfo orderByInfo)
-        {
-            string[] props = orderByInfo.PropertyName.Split('.');
-            Type type = typeof(T);
-
-            ParameterExpression arg = Expression.Parameter(type, "x");
-            Expression expr = arg;
-            foreach (string prop in props)
-            {
-                // use reflection (not ComponentModel) to mirror LINQ
-                PropertyInfo pi = type.GetProperty(prop, BindingFlags.SetProperty |
-                                                         BindingFlags.IgnoreCase |
-                                                         BindingFlags.Public |
-                                                         BindingFlags.Instance);
-                expr = Expression.Property(expr, pi);
-                type = pi.PropertyType;
-            }
-            Type delegateType = typeof(Func<,>).MakeGenericType(typeof(T), type);
-            LambdaExpression lambda = Expression.Lambda(delegateType, expr, arg);
-            string methodName = String.Empty;
-
-            if (!orderByInfo.Initial && collection is IOrderedQueryable<T>)
-            {
-                if (orderByInfo.Direction == SortDirection.Ascending)
-                    methodName = "ThenBy";
-                else
-                    methodName = "ThenByDescending";
-            }
+            if (orderByInfo.Direction == SortDirection.Ascending)
+                methodName = "ThenBy";
             else
-            {
-                if (orderByInfo.Direction == SortDirection.Ascending)
-                    methodName = "OrderBy";
-                else
-                    methodName = "OrderByDescending";
-            }
+                methodName = "ThenByDescending";
+        }
+        else
+        {
+            if (orderByInfo.Direction == SortDirection.Ascending)
+                methodName = "OrderBy";
+            else
+                methodName = "OrderByDescending";
+        }
 
-            return (IOrderedQueryable<T>)typeof(Queryable).GetMethods().Single(
+        return (IOrderedQueryable<T>)typeof(Queryable).GetMethods().Single(
                 method => method.Name == methodName
-                        && method.IsGenericMethodDefinition
-                        && method.GetGenericArguments().Length == 2
-                        && method.GetParameters().Length == 2)
-                .MakeGenericMethod(typeof(T), type)
-                .Invoke(null, new object[] { collection, lambda });
-        }
+                          && method.IsGenericMethodDefinition
+                          && method.GetGenericArguments().Length == 2
+                          && method.GetParameters().Length == 2)
+            .MakeGenericMethod(typeof(T), type)
+            .Invoke(null, new object[] { collection, lambda });
+    }
 
-        private static IEnumerable<OrderByInfo> ParseOrderBy(string orderBy)
+    private static IEnumerable<OrderByInfo> ParseOrderBy(string orderBy)
+    {
+        if (String.IsNullOrEmpty(orderBy))
+            yield break;
+
+        string[] items = orderBy.Split(',');
+        bool initial = true;
+        foreach (string item in items)
         {
-            if (String.IsNullOrEmpty(orderBy))
-                yield break;
+            string[] pair = item.Trim().Split(' ');
 
-            string[] items = orderBy.Split(',');
-            bool initial = true;
-            foreach (string item in items)
-            {
-                string[] pair = item.Trim().Split(' ');
+            if (pair.Length > 2)
+                throw new ArgumentException(String.Format("Invalid OrderBy string '{0}'. Order By Format: Property, Property2 ASC, Property2 DESC", item));
 
-                if (pair.Length > 2)
-                    throw new ArgumentException(String.Format("Invalid OrderBy string '{0}'. Order By Format: Property, Property2 ASC, Property2 DESC", item));
+            string prop = pair[0].Trim();
 
-                string prop = pair[0].Trim();
+            if (String.IsNullOrEmpty(prop))
+                throw new ArgumentException("Invalid Property. Order By Format: Property, Property2 ASC, Property2 DESC");
 
-                if (String.IsNullOrEmpty(prop))
-                    throw new ArgumentException("Invalid Property. Order By Format: Property, Property2 ASC, Property2 DESC");
+            SortDirection dir = SortDirection.Ascending;
 
-                SortDirection dir = SortDirection.Ascending;
+            if (pair.Length == 2)
+                dir = ("desc".Equals(pair[1].Trim(), StringComparison.OrdinalIgnoreCase) ? SortDirection.Descending : SortDirection.Ascending);
 
-                if (pair.Length == 2)
-                    dir = ("desc".Equals(pair[1].Trim(), StringComparison.OrdinalIgnoreCase) ? SortDirection.Descending : SortDirection.Ascending);
+            yield return new OrderByInfo { PropertyName = prop, Direction = dir, Initial = initial };
 
-                yield return new OrderByInfo { PropertyName = prop, Direction = dir, Initial = initial };
-
-                initial = false;
-            }
-
+            initial = false;
         }
+    }
 
-        private class OrderByInfo
-        {
-            public string PropertyName { get; set; }
-            public SortDirection Direction { get; set; }
-            public bool Initial { get; set; }
-        }
+    private class OrderByInfo
+    {
+        public string PropertyName { get; set; }
+        public SortDirection Direction { get; set; }
+        public bool Initial { get; set; }
+    }
 
-        private enum SortDirection
-        {
-            Ascending = 0,
-            Descending = 1
-        }
+    private enum SortDirection
+    {
+        Ascending = 0,
+        Descending = 1
+    }
 
-        public static string FirstCharToUpper(string input)
-        {
-            if (String.IsNullOrEmpty(input))
-                throw new ArgumentException("Enter a word other than null or empty!");
-            return input.First().ToString().ToUpper() + input.Substring(1);
-        }
+    public static string FirstCharToUpper(string input)
+    {
+        if (String.IsNullOrEmpty(input))
+            throw new ArgumentException("Enter a word other than null or empty!");
+        return input.First().ToString().ToUpper() + input.Substring(1);
     }
 }
