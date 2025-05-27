@@ -1,32 +1,38 @@
-﻿namespace ENT.Framework
+﻿namespace ENT.Framework;
+
+public static class DateTimeExtension
 {
-    public static class DateTimeExtension
+    public static DateTime Now
     {
-        public static DateTime Now
+        get
         {
-            get
-            {
-                TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
-                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
-            }
+            TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
         }
-        public static DateTime NowCentralAsiaStandardTime
+    }
+    public static DateTime NowCentralAsiaStandardTime
+    {
+        get
         {
-            get
-            {
-                TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time");
-                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
-            }
+            TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
         }
-        public static DateTime NowEasternStandardTime
+    }
+    public static DateTime NowEasternStandardTime
+    {
+        get
         {
-            get
-            {
-                TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-                return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
-            }
+            TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
         }
+    }
 
-
+    public static DateTime NowCentralStandardTime
+    {
+        get
+        {
+            TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
+        }
     }
 }
