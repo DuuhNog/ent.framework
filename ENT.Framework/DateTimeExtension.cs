@@ -6,24 +6,24 @@ public static class DateTimeExtension
     {
         get
         {
-            TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
-            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
+            var standardTime = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, standardTime);
         }
     }
     public static DateTime NowCentralAsiaStandardTime
     {
         get
         {
-            TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time");
-            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
+            var standardTime = TimeZoneInfo.FindSystemTimeZoneById("Central Asia Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, standardTime);
         }
     }
     public static DateTime NowEasternStandardTime
     {
         get
         {
-            TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
+            var standardTime = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, standardTime);
         }
     }
 
@@ -31,8 +31,8 @@ public static class DateTimeExtension
     {
         get
         {
-            TimeZoneInfo Standard_Time = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
-            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Standard_Time);
+            var standardTime = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, standardTime);
         }
     }
 }
